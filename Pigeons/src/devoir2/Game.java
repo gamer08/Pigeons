@@ -1,21 +1,26 @@
 package devoir2;
 
+import javax.swing.Timer;
+
 public class Game implements Runnable
 {
 	private MainWindow _ui;
 	private Thread _thread;
 	private boolean _isRunning;
+	private int _fps;
+	private double _timePerTickInNanoSecond, _deltaTime;
+	private long _now, _last;
 	
 	public Game()
 	{
-		_ui = new MainWindow();
 		_isRunning = false;
 	}
 	
 	private void Init()
 	{
 		_ui = new MainWindow();
-		_isRunning = false;
+		_fps =30;
+		_timePerTickInNanoSecond = 1000000000/_fps;
 	}
 	
 	public synchronized void Start() 
@@ -49,10 +54,21 @@ public class Game implements Runnable
 	{
 		Init();
 		
+		_deltaTime = 0;
+		_last = System.nanoTime();
+		
 		while (_isRunning)
 		{
-			Tick(0.0f);
-			Render();
+			_now = System.nanoTime();
+			_deltaTime+= (_now -_last) /_timePerTickInNanoSecond;
+			_last = _now;
+			
+			if (_deltaTime >=1)
+			{
+				Tick(0.0f);
+				Render();
+				_deltaTime--;
+			}
 		}
 		
 		Stop();

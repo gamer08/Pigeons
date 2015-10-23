@@ -21,18 +21,26 @@ import javax.swing.JButton;
  * JPanel qui possède les piegons et la nourriture
  *
  */
-public class GameUI extends JPanel implements MouseListener
+public class PanelGame extends JPanel implements MouseListener
 {
 	static Dimension _dimension;
 	public Vector<Pigeon> _pigeons;
-	public int _nbPigeons=1;
+	public int _nbPigeons=10;
 	
-	public GameUI()
+	public PanelGame()
 	{
 		System.out.println("Constructeur de GameUI");
 		this._dimension = new Dimension(400,500);
 		this.setBackground(Color.green);
 		this.addMouseListener(this);
+		
+		_pigeons = new Vector<Pigeon>();
+		
+		for (int i=0; i<_nbPigeons; i++)
+		{
+			Pigeon p = new Pigeon(_dimension.width, _dimension.height);
+			_pigeons.add(p);
+		}
 		
 	}
 	
@@ -110,20 +118,22 @@ public class GameUI extends JPanel implements MouseListener
  	 {
         super.paintComponent(g);
 
-        DrawObjects(g);
+        drawPigeons(g);
 
         Toolkit.getDefaultToolkit().sync();
         
         
  	 }
 	 
-	 private void DrawObjects(Graphics g)
+	 private void drawPigeons(Graphics g)
 	 {
 		 
-		 Graphics2D g2d = (Graphics2D) g;
+		 //Graphics2D g2d = (Graphics2D) g;
 	     for (Pigeon p : _pigeons)
 	     {
-	    	 g2d.drawImage(p.GetImage(),p.GetPosition()._x,p.GetPosition()._y,this);
+	    	 //g2d.drawImage(p.getImage(),p.getPosition()._x,p.getPosition()._y,this);
+	    	 Image imgPigeon = getToolkit().getImage(Pigeon.getSymbol());
+	    	 g.drawImage(imgPigeon, p.getPosition()._x, p.getPosition()._y, null);
 	     }
 	 }
 	 

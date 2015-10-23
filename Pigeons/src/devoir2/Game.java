@@ -2,19 +2,19 @@ package devoir2;
 
 public class Game implements Runnable
 {
-	private MainUI _ui;
+	private MainWindow _ui;
 	private Thread _thread;
 	private boolean _isRunning;
 	
 	public Game()
 	{
-		_ui = new MainUI();
+		_ui = new MainWindow();
 		_isRunning = false;
 	}
 	
 	private void Init()
 	{
-		_ui = new MainUI();
+		_ui = new MainWindow();
 		_isRunning = false;
 	}
 	

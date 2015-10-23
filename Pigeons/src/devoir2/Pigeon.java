@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -12,35 +13,26 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 
-public class Pigeon extends Thread
+public class Pigeon
 {
 	static String _symbol = "pigeon.png";
 	
-	private final Image _image;
+	//private final Image _image;
 	private Position _position;
 	
 	
-	public Pigeon(Position position)
+	public Pigeon(int width, int height)
 	{
-		AudioInputStream audioInputStream = null;
-		//File f = "scared.mp3";
-		/* try{
-		 			//obtention d'un flux audio à partir d'un fichier (objet File)
-		      audioInputStream = AudioSystem.getAudioInputStream(f);
-
-		    } catch (UnsupportedAudioFileException e) {
-		        	e.printStackTrace();
-		          return;
-		    } catch (IOException e) {
-		            e.printStackTrace();
-		            return;
-		    }
-		 
-		 AudioFormat audioFormat = audioInputStream.getFormat();*/
+		Random rand = new Random();
 		
-		_position = position;
+		int xRandom;
+		int yRandom;
+		xRandom = rand.nextInt(width +1);
+		yRandom = rand.nextInt(height +1);
 		
-		_image = new ImageIcon(this.getClass().getResource("data/pigeon.png")).getImage();
+		_position = new Position(xRandom, yRandom);
+		
+		//_image = new ImageIcon(this.getClass().getResource(_symbol)).getImage();
 		
 		
 		
@@ -57,17 +49,13 @@ public class Pigeon extends Thread
 		return _symbol;
 	}
 	
-	public void run()
-	{
-		
-	}
 
-	public Image GetImage()
+	/*public Image getImage()
 	{
-		return _image;
-	}
+		//return _image;
+	}*/
 	
-	public Position GetPosition()
+	public Position getPosition()
 	{
 		return _position;
 	}

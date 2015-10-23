@@ -4,8 +4,10 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MediaTracker;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -102,6 +104,29 @@ public class GameUI extends JPanel implements MouseListener
 	{
 
 	}
+	
+	 @Override
+	 public void paintComponent(Graphics g) 
+ 	 {
+        super.paintComponent(g);
+
+        DrawObjects(g);
+
+        Toolkit.getDefaultToolkit().sync();
+        
+        
+ 	 }
+	 
+	 private void DrawObjects(Graphics g)
+	 {
+		 
+		 Graphics2D g2d = (Graphics2D) g;
+	     for (Pigeon p : _pigeons)
+	     {
+	    	 g2d.drawImage(p.GetImage(),p.GetPosition()._x,p.GetPosition()._y,this);
+	     }
+	 }
+	 
 
 	 /**
 	  * Méthode permettant de dessiner de la nourriture 
@@ -120,41 +145,42 @@ public class GameUI extends JPanel implements MouseListener
 		 */
 		public void setPigeons(Graphics g)
 		{
-			System.out.println("pigeons mis en place");
-			Random rand = new Random();
-			int xRandom = 0;
-			int yRandom = 0;
-			int width = 10;
-			int height = 50;
 			
-			/* Attente du chargement de l'image car il faut cliquer deux fois sur le bouton 
-			pour avoir affichage de l'image...*/
-			
-			
-			Image imgPigeon = getToolkit().getImage(Pigeon.getSymbol());
-			
-			// Create a MediaTracker instance,
-			// to montior loading of images
-			
-			MediaTracker tracker = new MediaTracker(this);
-			
-			if (tracker.checkID(1) == false)
-			{
-				System.out.println("attente");
-			}
-			else
-			{
-				for (int i=0; i<_nbPigeons; i++)
-				{
-					xRandom = rand.nextInt(_dimension.width +1);
-					yRandom = rand.nextInt(_dimension.height +1);
-					
-					System.out.println("xRandom: " + xRandom + " -- yRandom: " + yRandom);
-			        g.drawImage(imgPigeon, xRandom, yRandom, null);
-		
-				}
-			}
-	
+//			System.out.println("pigeons mis en place");
+//			Random rand = new Random();
+//			int xRandom = 0;
+//			int yRandom = 0;
+//			int width = 10;
+//			int height = 50;
+//			
+//			/* Attente du chargement de l'image car il faut cliquer deux fois sur le bouton 
+//			pour avoir affichage de l'image...*/
+//			
+//			
+//			Image imgPigeon = getToolkit().getImage(Pigeon.getSymbol());
+//			
+//			// Create a MediaTracker instance,
+//			// to montior loading of images
+//			
+//			MediaTracker tracker = new MediaTracker(this);
+//			
+//			if (tracker.checkID(1) == false)
+//			{
+//				System.out.println("attente");
+//			}
+//			else
+//			{
+//				for (int i=0; i<_nbPigeons; i++)
+//				{
+//					xRandom = rand.nextInt(_dimension.width +1);
+//					yRandom = rand.nextInt(_dimension.height +1);
+//					
+//					System.out.println("xRandom: " + xRandom + " -- yRandom: " + yRandom);
+//			        g.drawImage(imgPigeon, xRandom, yRandom, null);
+//		
+//				}
+//			}
+//			
 		}
 		
 }

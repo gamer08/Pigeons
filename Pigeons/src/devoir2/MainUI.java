@@ -30,12 +30,7 @@ public class MainUI  {
 	{
 		System.out.println("Constructeur de MainUI");
 		
-	}
-	
-	public static void main(String[] args) 
-	{       
-        setFrame();
-         
+		  setFrame();
 	}
 	
 	/**

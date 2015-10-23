@@ -10,13 +10,17 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.ImageIcon;
 
-public class Pigeon extends Thread implements Observer
+public class Pigeon extends Thread
 {
 	static String _symbol = "pigeon.png";
 	
+	private final Image _image;
+	private Position _position;
 	
-	public Pigeon()
+	
+	public Pigeon(Position position)
 	{
 		AudioInputStream audioInputStream = null;
 		//File f = "scared.mp3";
@@ -33,6 +37,12 @@ public class Pigeon extends Thread implements Observer
 		    }
 		 
 		 AudioFormat audioFormat = audioInputStream.getFormat();*/
+		
+		_position = position;
+		
+		_image = new ImageIcon(this.getClass().getResource("data/pigeon.png")).getImage();
+		
+		
 		
 	}
 	
@@ -52,10 +62,14 @@ public class Pigeon extends Thread implements Observer
 		
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
+	public Image GetImage()
+	{
+		return _image;
+	}
+	
+	public Position GetPosition()
+	{
+		return _position;
 	}
 	
 	

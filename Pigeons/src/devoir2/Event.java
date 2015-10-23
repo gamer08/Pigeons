@@ -5,6 +5,7 @@ public  class Event
 	public enum Type
 	{
 		FOOD,
+		FOOD_EXPIRED,
 		PANIC
 	}
 	

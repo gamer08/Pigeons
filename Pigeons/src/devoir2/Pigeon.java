@@ -23,6 +23,7 @@ public class Pigeon
 	
 	public Pigeon(int width, int height)
 	{
+		System.out.println("9 - In Pigeon (constructor)");
 		Random rand = new Random();
 		
 		int xRandom;

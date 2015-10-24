@@ -18,6 +18,7 @@ public class Game implements Runnable
 	
 	private void Init()
 	{
+		System.out.println("4 - In Game.init");
 		_ui = new MainWindow();
 		_fps =30;
 		_timePerTickInNanoSecond = 1000000000/_fps;
@@ -25,6 +26,7 @@ public class Game implements Runnable
 	
 	public synchronized void Start() 
 	{
+		System.out.println("2 - In Game.Start");
 		if (_isRunning)
 			return;
 		
@@ -52,6 +54,7 @@ public class Game implements Runnable
 	@Override
 	public void run()
 	{
+		System.out.println("3 - In Game.run");
 		Init();
 		
 		_deltaTime = 0;
@@ -83,7 +86,8 @@ public class Game implements Runnable
 	
 	private void Render()
 	{
-		_ui._panelGame.repaint();
+		System.out.println("In Game.render");
+		//_ui._panelGame.repaint();
 	}
 
 	

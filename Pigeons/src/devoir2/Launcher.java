@@ -4,7 +4,8 @@ public class Launcher
 {
 	public static void main(String[] args) 
 	{       
-         Game game = new Game();
-         game.Start();
+		System.out.println("1 - In Launcher.main");
+        Game game = new Game();
+        game.Start();
 	}
 }

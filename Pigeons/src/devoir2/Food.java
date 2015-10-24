@@ -16,5 +16,10 @@ public class Food {
 	{
 		return _symbol;
 	}
+	
+	public void setSymbol (String s)
+	{
+		_symbol = s;
+	}
 
 }

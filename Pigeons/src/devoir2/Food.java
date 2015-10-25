@@ -6,10 +6,11 @@ public class Food {
 	
 	Boolean _isFresh;
 	static String _symbol = "food.png";
+	Position _position;
 	
-	public Food()
+	public Food(int x, int y)
 	{
-		
+		_position = new Position(x,y);
 	}
 	
 	public static String getSymbol()

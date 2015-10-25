@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
@@ -24,8 +25,9 @@ import javax.swing.JButton;
 public class PanelGame extends JPanel implements MouseListener
 {
 	static Dimension _dimension;
-	public Vector<Pigeon> _pigeons;
+	public ArrayList<Pigeon> _pigeons;
 	public int _nbPigeons=1;
+	public ArrayList<Food> _food;
 
 	
 	
@@ -36,13 +38,16 @@ public class PanelGame extends JPanel implements MouseListener
 		this.setBackground(Color.green);
 		this.addMouseListener(this);
 		
-		_pigeons = new Vector<Pigeon>();
+		_pigeons = new ArrayList<Pigeon>();
+		_food = new ArrayList<Food>();
 		
 		for (int i=0; i<_nbPigeons; i++)
 		{
 			Pigeon p = new Pigeon(_dimension.width, _dimension.height);
 			_pigeons.add(p);
 		}
+		
+		
 		
 	}
 	
@@ -85,11 +90,15 @@ public class PanelGame extends JPanel implements MouseListener
 		System.out.print("Clic à la position" + System.lineSeparator());
 		System.out.print("X :" + x + System.lineSeparator());
 		System.out.print("Y :" + y + System.lineSeparator());
-		drawFood(x,y,this.getGraphics());
-
+		
+		synchronized(_food)
+		{
+			Food f = new Food(x, y);
+			_food.add(f);
+		}
+		
 		
 	}
-
 
 	@Override
 	public void mouseEntered(MouseEvent e) 
@@ -121,6 +130,7 @@ public class PanelGame extends JPanel implements MouseListener
         super.paintComponent(g);
 
         drawPigeons(g);
+        drawFood(g);
 
         Toolkit.getDefaultToolkit().sync();
         
@@ -145,10 +155,17 @@ public class PanelGame extends JPanel implements MouseListener
 	  * @param y Ordonnées du clic
 	  * @param g
 	  */
-	 public void drawFood(int x, int y,Graphics g)
+	 public void drawFood(Graphics g)
 	 {
-		 Image imgFood = getToolkit().getImage(Food.getSymbol());
-		 g.drawImage(imgFood, x, y, null);
+		 synchronized(_food)
+		 {
+			 
+			 Image imgFood = getToolkit().getImage(Food.getSymbol());
+			 for (Food f : _food)
+			 g.drawImage(imgFood, f._position._x, f._position._y, null);
+		 }
+		 
+		 
 	 }
 	 
 	 /**

@@ -7,7 +7,6 @@ public class Position
 	
 	public Position (int x, int y)
 	{
-		System.out.println("10 - In Position (constructor)");
 		_x = x;
 		_y = y;
 	}

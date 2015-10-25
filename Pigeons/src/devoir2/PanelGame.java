@@ -25,18 +25,18 @@ public class PanelGame extends JPanel implements MouseListener
 {
 	static Dimension _dimension;
 	public Vector<Pigeon> _pigeons;
-	public int _nbPigeons=10;
-	public Vector<Food> _food;
+	public int _nbPigeons=1;
+
+	
 	
 	public PanelGame()
-	{
-		System.out.println("8 - In GameUI (constructor)");
+	{	
+		System.out.println("Constructeur de GameUI");
 		this._dimension = new Dimension(400,500);
 		this.setBackground(Color.green);
 		this.addMouseListener(this);
 		
 		_pigeons = new Vector<Pigeon>();
-		_food = new Vector<Food>();
 		
 		for (int i=0; i<_nbPigeons; i++)
 		{
@@ -87,16 +87,10 @@ public class PanelGame extends JPanel implements MouseListener
 		System.out.print("Y :" + y + System.lineSeparator());
 		drawFood(x,y,this.getGraphics());
 
-
 		
 	}
 
-	@Override
-	public void repaint()
-	{
-		System.out.println("In PanelGame.repaint()");
-	}
-	
+
 	@Override
 	public void mouseEntered(MouseEvent e) 
 	{
@@ -124,7 +118,6 @@ public class PanelGame extends JPanel implements MouseListener
 	 @Override
 	 public void paintComponent(Graphics g) 
  	 {
-		System.out.println("In PanelGame.paintComponent");
         super.paintComponent(g);
 
         drawPigeons(g);
@@ -134,24 +127,14 @@ public class PanelGame extends JPanel implements MouseListener
         
  	 }
 	 
-	 @Override
-	 public void paint(Graphics g)
-	 {
-		 System.out.println("In PanelGame.paint");
-			
-		 super.paint(g);
-
-	 }
-	 
 	 private void drawPigeons(Graphics g)
 	 {
-		 
 		 //Graphics2D g2d = (Graphics2D) g;
 	     for (Pigeon p : _pigeons)
 	     {
 	    	 //g2d.drawImage(p.getImage(),p.getPosition()._x,p.getPosition()._y,this);
-	    	 Image imgPigeon = getToolkit().getImage(Pigeon.getSymbol());
-	    	 g.drawImage(imgPigeon, p.getPosition()._x, p.getPosition()._y, null);
+	    	 Image imgPigeon = getToolkit().getImage(p.getSymbol());
+	    	g.drawImage(imgPigeon, p.getPosition()._x, p.getPosition()._y, null);
 	     }
 	 }
 	 
@@ -164,22 +147,8 @@ public class PanelGame extends JPanel implements MouseListener
 	  */
 	 public void drawFood(int x, int y,Graphics g)
 	 {
-		 if (_food.size()>1)
-		 {
-			 _food.elementAt(_food.size()).setSymbol("food2");
-		 }
-		 
 		 Image imgFood = getToolkit().getImage(Food.getSymbol());
 		 g.drawImage(imgFood, x, y, null);
-		 //update(this.getGraphics());
-		 
-		 //paintImmediately(x,y,50,50);
-	 }
-	 
-	 @Override
-	 public void update(Graphics g)
-	 {
-		 System.out.println("In PanelGame.update");
 	 }
 	 
 	 /**
@@ -223,6 +192,35 @@ public class PanelGame extends JPanel implements MouseListener
 //				}
 //			}
 //			
+		}
+		
+		public synchronized void UpdatePigeon(float deltaTime)
+		{
+			for (Pigeon p : _pigeons)
+			{	
+				p.Update(deltaTime);
+			}
+		}
+		
+		private synchronized void DisableUpdatePigeons()
+		{
+			for (Pigeon p : _pigeons)
+			{
+				p.DisableRun();
+			}
+		}
+		
+		public synchronized boolean TryRefreshGame()
+		{
+			/*for (Pigeon p : _pigeons)
+			{
+				if (p.IsUpdating())
+					return false;
+			}*/
+			
+			DisableUpdatePigeons();
+			
+			return true;
 		}
 		
 }

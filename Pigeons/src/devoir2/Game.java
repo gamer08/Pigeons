@@ -1,5 +1,7 @@
 package devoir2;
 
+import java.util.Vector;
+
 import javax.swing.Timer;
 
 public class Game implements Runnable
@@ -10,23 +12,25 @@ public class Game implements Runnable
 	private int _fps;
 	private double _timePerTickInNanoSecond, _deltaTime;
 	private long _now, _last;
+	private boolean _isRefreshNeeded;
+	
 	
 	public Game()
 	{
-		_isRunning = false;
+		_isRunning = _isRefreshNeeded = false;
+		
 	}
 	
 	private void Init()
 	{
-		System.out.println("4 - In Game.init");
 		_ui = new MainWindow();
-		_fps =30;
+		_fps =1;
 		_timePerTickInNanoSecond = 1000000000/_fps;
+		
 	}
 	
 	public synchronized void Start() 
 	{
-		System.out.println("2 - In Game.Start");
 		if (_isRunning)
 			return;
 		
@@ -54,7 +58,6 @@ public class Game implements Runnable
 	@Override
 	public void run()
 	{
-		System.out.println("3 - In Game.run");
 		Init();
 		
 		_deltaTime = 0;
@@ -62,15 +65,27 @@ public class Game implements Runnable
 		
 		while (_isRunning)
 		{
-			_now = System.nanoTime();
-			_deltaTime+= (_now -_last) /_timePerTickInNanoSecond;
-			_last = _now;
+			//if (!_isRefreshNeeded)
+			//{
+				_now = System.nanoTime();
+				
+				if (!_isRefreshNeeded)
+					_deltaTime+= (_now -_last) /_timePerTickInNanoSecond;
+				
+				_last = _now;
+			//}
 			
 			if (_deltaTime >=1)
-			{
+			{	
 				Tick(0.0f);
 				Render();
 				_deltaTime--;
+			}
+			else
+			{
+				
+			_ui._panelGame.TryRefreshGame();
+				
 			}
 		}
 		
@@ -78,19 +93,48 @@ public class Game implements Runnable
 		
 	}
 	
-	
 	private void Tick(float deltaTime)
 	{
-		
+		_ui._panelGame.UpdatePigeon(deltaTime);
 	}
 	
 	private void Render()
 	{
-		System.out.println("In Game.render");
-		//_ui._panelGame.repaint();
+		_ui._panelGame.repaint();
 	}
 
+	public synchronized boolean IsRefreshNeeded()
+	{
+		return _isRefreshNeeded;
+	}
 	
-	
-	
+//	public synchronized void UpdatePigeon(float deltaTime)
+//	{
+//		for (Pigeon p : _pigeons)
+//		{	
+//			p.Update(deltaTime);
+//		}
+//	}
+//	
+//	private synchronized void DisableUpdatePigeons()
+//	{
+//		for (Pigeon p : _pigeons)
+//		{
+//			p.DisableRun();
+//		}
+//	}
+//	
+//	public synchronized boolean TryRefreshGame()
+//	{
+//		/*for (Pigeon p : _pigeons)
+//		{
+//			if (p.IsUpdating())
+//				return false;
+//		}*/
+//		
+//		DisableUpdatePigeons();
+//		
+//		return true;
+//	}
+//	
 }

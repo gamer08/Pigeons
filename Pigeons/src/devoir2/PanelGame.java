@@ -28,11 +28,15 @@ public class PanelGame extends JPanel implements MouseListener
 	public ArrayList<Pigeon> _pigeons;
 	public int _nbPigeons=1;
 	public ArrayList<Food> _food;
+	private volatile boolean _isGameRefreshNeeded;
+	
 
 	
 	
 	public PanelGame()
 	{	
+		_isGameRefreshNeeded = false;
+		
 		System.out.println("Constructeur de GameUI");
 		this._dimension = new Dimension(400,500);
 		this.setBackground(Color.green);
@@ -41,14 +45,12 @@ public class PanelGame extends JPanel implements MouseListener
 		_pigeons = new ArrayList<Pigeon>();
 		_food = new ArrayList<Food>();
 		
-		for (int i=0; i<_nbPigeons; i++)
-		{
-			Pigeon p = new Pigeon(_dimension.width, _dimension.height);
-			_pigeons.add(p);
-		}
-		
-		
-		
+		//for (int i=0; i<_nbPigeons; i++)
+		//{
+			//Pigeon p = new Pigeon(_dimension.width, _dimension.height,this);
+			_pigeons.add(new Pigeon(50,50,this));
+			_pigeons.add(new Pigeon(50,100,this));
+		//}	
 	}
 	
 	public static void CreateAndShowGUI() 
@@ -132,9 +134,7 @@ public class PanelGame extends JPanel implements MouseListener
         drawPigeons(g);
         drawFood(g);
 
-        Toolkit.getDefaultToolkit().sync();
-        
-        
+        Toolkit.getDefaultToolkit().sync();  
  	 }
 	 
 	 private void drawPigeons(Graphics g)
@@ -211,33 +211,41 @@ public class PanelGame extends JPanel implements MouseListener
 //			
 		}
 		
-		public synchronized void UpdatePigeon(float deltaTime)
+		/*public synchronized void UpdatePigeon(float deltaTime)
 		{
 			for (Pigeon p : _pigeons)
 			{	
 				p.Update(deltaTime);
 			}
-		}
+		}*/
 		
-		private synchronized void DisableUpdatePigeons()
+		/*private synchronized void DisableUpdatePigeons()
 		{
 			for (Pigeon p : _pigeons)
 			{
 				p.DisableRun();
 			}
-		}
+		}*/
 		
-		public synchronized boolean TryRefreshGame()
+		public synchronized boolean CanRefreshGame()
 		{
-			/*for (Pigeon p : _pigeons)
+			for (Pigeon p : _pigeons)
 			{
 				if (p.IsUpdating())
 					return false;
-			}*/
-			
-			DisableUpdatePigeons();
+			}
 			
 			return true;
+		}
+		
+		public synchronized void SetGameRefreshNeeded(boolean value)
+		{
+			_isGameRefreshNeeded = value;
+		}
+		
+		public synchronized boolean GetGameRefreshNeeded()
+		{
+			return _isGameRefreshNeeded;
 		}
 		
 }

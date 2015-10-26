@@ -26,7 +26,6 @@ public class Game implements Runnable
 		_ui = new MainWindow();
 		_fps =1;
 		_timePerTickInNanoSecond = 1000000000/_fps;
-		
 	}
 	
 	public synchronized void Start() 
@@ -65,27 +64,25 @@ public class Game implements Runnable
 		
 		while (_isRunning)
 		{
-			//if (!_isRefreshNeeded)
-			//{
-				_now = System.nanoTime();
-				
-				if (!_isRefreshNeeded)
-					_deltaTime+= (_now -_last) /_timePerTickInNanoSecond;
-				
-				_last = _now;
-			//}
+			_now = System.nanoTime();
+			
+			if (!_isRefreshNeeded)
+				_deltaTime+= (_now -_last) /_timePerTickInNanoSecond;
+			
+			_last = _now;
 			
 			if (_deltaTime >=1)
 			{	
-				Tick(0.0f);
-				Render();
-				_deltaTime--;
-			}
-			else
-			{
+				_isRefreshNeeded = true;
+				_ui._panelGame.SetGameRefreshNeeded(true);
 				
-			_ui._panelGame.TryRefreshGame();
-				
+				if (_ui._panelGame.CanRefreshGame())
+				{
+					Render();
+					_deltaTime = 0;
+					_isRefreshNeeded = false;
+					_ui._panelGame.SetGameRefreshNeeded(false);
+				}
 			}
 		}
 		
@@ -93,10 +90,10 @@ public class Game implements Runnable
 		
 	}
 	
-	private void Tick(float deltaTime)
+	/*private void Tick(float deltaTime)
 	{
 		_ui._panelGame.UpdatePigeon(deltaTime);
-	}
+	}*/
 	
 	private void Render()
 	{

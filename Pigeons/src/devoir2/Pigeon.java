@@ -23,62 +23,87 @@ public class Pigeon implements Runnable
 	//private final Image _image;
 	private Position _position;
 	private Thread _thread;
-	private volatile boolean _canUpdate, _hasRunAtLeastOnce, _gameTerminated, _isUpdating;
-	private float _deltaTime;
+	private volatile boolean _gameTerminated, _isUpdating;
+	private int _fps;
+	private double _timePerTickInNanoSecond, _deltaTime;
+	private long _now, _last;
+	private PanelGame _owner;
 	
-	private boolean set;
-	
-	public Pigeon(int width, int height)
+	public Pigeon(int width, int height, PanelGame panel)
 	{
 		Random rand = new Random();
 		
-		int xRandom;
+		/*int xRandom;
 		int yRandom;
 		xRandom = rand.nextInt(width +1);
-		yRandom = rand.nextInt(height +1);
+		yRandom = rand.nextInt(height +1);*/
 		
-		_position = new Position(50, 50);
+		_position = new Position(width, height);
 		
-		_canUpdate = false;
 		_gameTerminated = false;
 		_isUpdating = false;
 		
+		_owner = panel;
+		
+		Start();
+	}
+	
+	private void Init()
+	{
+		_fps =1;
+		_timePerTickInNanoSecond = 1000000000/_fps;
+	}
+	
+	private void Start() 
+	{
 		_thread = new Thread(this);
 		_thread.start();
 	}
 	
-	@Override
-	public void run()
-	{
-		while(!_gameTerminated)
+	public synchronized void Stop() 
+	{	
+		try 
 		{
-			_hasRunAtLeastOnce =true;	
-			if (_canUpdate)
-			{
-				//if (!_owner.IsRefreshNeeded())
-				//{
-					UpdateLogic(_deltaTime);
-				//}
-			}
-			else
-			{
-				synchronized(this)
-				{
-					try 
-					{
-						this.wait();
-					}
-					catch (InterruptedException e) 
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
+			_thread.join();
+		} 
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
 		}
 	}
 	
-	public boolean IsWainting()
+	
+	
+	@Override
+	public void run()
+	{
+		Init();
+		
+		_deltaTime = 0;
+		_last = System.nanoTime();
+		
+		while(!_gameTerminated)
+		{
+			_now = System.nanoTime();
+			if (!_owner.GetGameRefreshNeeded())
+			{
+				_deltaTime+= (_now -_last) /_timePerTickInNanoSecond;
+				_last = _now;
+				
+				if (_deltaTime >=1)
+				{
+					Update(0.0f);
+					_deltaTime = 0;
+				}
+				
+			}
+			else
+				_last =_now;
+			
+		}
+	}
+	
+	/*public boolean IsWainting()
 	{
 		boolean waiting = false;
 		Thread.State state = _thread.getState();
@@ -94,7 +119,7 @@ public class Pigeon implements Runnable
 				
 		}
 		return waiting;
-	}
+	}*/
 	
 	public void moveTo(Position p)
 	{
@@ -117,7 +142,7 @@ public class Pigeon implements Runnable
 		return _position;
 	}
 	
-	private synchronized void EnableRun()
+	/*private synchronized void EnableRun()
 	{
 		if (_canUpdate || !_hasRunAtLeastOnce)
 			return;
@@ -130,29 +155,18 @@ public class Pigeon implements Runnable
 		{
 			this.notify();
 		}
-	}
+	}*/
 	
-	public synchronized void DisableRun()
+	/*public synchronized void DisableRun()
 	{
 		if (_canUpdate)
 		{
 			_canUpdate = false;
 			
 		}
-	}
+	}*/
 	
-	public synchronized void Update(float deltaTime)
-	{
-		EnableRun();
-		
-		//_position._x+=1;
-		
-		//System.out.println("Update " + _position._x +" " + System.nanoTime());
-		
-		_deltaTime = deltaTime;
-	}
-	
-	private synchronized void UpdateLogic(float deltaTime)
+	/*private synchronized void UpdateLogic(float deltaTime)
 	{
 		_isUpdating = true;
 		
@@ -161,7 +175,17 @@ public class Pigeon implements Runnable
 		System.out.println("Update " + _position._x +" " + System.nanoTime());
 		
 		_isUpdating = false;
+	}*/
+	
+	
+	private void Update(float deltaTime)
+	{
+		_isUpdating = true;
+		_position._x +=5;
+		_isUpdating = false;
 	}
+	
+	
 	
 	public synchronized boolean IsUpdating()
 	{

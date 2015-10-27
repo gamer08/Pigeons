@@ -24,7 +24,7 @@ public class Game implements Runnable
 	private void Init()
 	{
 		_ui = new MainWindow();
-		_fps =1;
+		_fps =30;
 		_timePerTickInNanoSecond = 1000000000/_fps;
 	}
 	

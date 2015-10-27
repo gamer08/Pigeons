@@ -16,18 +16,30 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 
-public class Pigeon implements Runnable
+import devoir2.Event.Type;
+import devoir2.Vector;
+
+public class Pigeon implements Runnable, SubscriberInterface
 {
 	static String _symbol = "pigeon.png";
 	
 	//private final Image _image;
-	private Position _position;
+	private Vector _position;
 	private Thread _thread;
 	private volatile boolean _gameTerminated, _isUpdating;
 	private int _fps;
 	private double _timePerTickInNanoSecond, _deltaTime;
 	private long _now, _last;
 	private PanelGame _owner;
+	private float _fixedUpdateDeltaTime;
+	
+	//Steering behavior data
+	
+	private SteeringBehavior _steeringBehavior;
+	private boolean _onSeek;
+	private Vector _defaultVelocity ,_velocity;
+	private float _speed;
+	
 	
 	public Pigeon(int width, int height, PanelGame panel)
 	{
@@ -38,19 +50,29 @@ public class Pigeon implements Runnable
 		xRandom = rand.nextInt(width +1);
 		yRandom = rand.nextInt(height +1);*/
 		
-		_position = new Position(width, height);
+		_position = new Vector(width, height);
 		
 		_gameTerminated = false;
 		_isUpdating = false;
 		
+		_steeringBehavior = new SteeringBehavior(this);
+		_onSeek = false;
+		_velocity = new Vector();
+		_defaultVelocity = new Vector(1,0);
+		_speed = 20.0f;
+		
+		_fixedUpdateDeltaTime = 0.5f;
+		
 		_owner = panel;
+		
+		MessageBroker.GetInstance().AddSubscriber(Type.FOOD, this);
 		
 		Start();
 	}
 	
 	private void Init()
 	{
-		_fps =1;
+		_fps =30;
 		_timePerTickInNanoSecond = 1000000000/_fps;
 	}
 	
@@ -92,7 +114,7 @@ public class Pigeon implements Runnable
 				
 				if (_deltaTime >=1)
 				{
-					Update(0.0f);
+					Update(_fixedUpdateDeltaTime);
 					_deltaTime = 0;
 				}
 				
@@ -137,9 +159,55 @@ public class Pigeon implements Runnable
 		//return _image;
 	}*/
 	
-	public synchronized Position getPosition()
+	public synchronized Vector getPosition()
 	{
 		return _position;
+	}
+	
+	public synchronized boolean IsUpdating()
+	{
+		return _isUpdating;
+	}
+	
+	public Vector GetVelocity()
+	{
+		return _velocity;
+	}
+	
+	public float GetSpeed()
+	{
+		return _speed;
+	}
+	
+	private void Update(float deltaTime)
+	{
+		_isUpdating = true;
+		
+		Vector steeringForce = new Vector();
+		
+		steeringForce = _steeringBehavior.Calculate();
+		steeringForce = Vector.ScalarMultiplication(steeringForce, deltaTime);
+		
+		//_velocity = Vector.Add(_velocity, steeringForce);
+		
+		_velocity = steeringForce;
+		
+		_velocity = Vector.ScalarMultiplication(_velocity, deltaTime);
+		
+		_position = Vector.Add(_position, _velocity);
+		
+		_isUpdating = false;
+	}
+	
+	public void HandleMessage(Event event)
+	{
+
+		if (event._type == Type.FOOD)
+		{
+			_steeringBehavior.OnSeek(true);
+			_steeringBehavior.SetTarget(event._position);
+		}
+		
 	}
 	
 	/*private synchronized void EnableRun()
@@ -176,20 +244,4 @@ public class Pigeon implements Runnable
 		
 		_isUpdating = false;
 	}*/
-	
-	
-	private void Update(float deltaTime)
-	{
-		_isUpdating = true;
-		_position._x +=5;
-		_isUpdating = false;
-	}
-	
-	
-	
-	public synchronized boolean IsUpdating()
-	{
-		return _isUpdating;
-	}
-	
 }

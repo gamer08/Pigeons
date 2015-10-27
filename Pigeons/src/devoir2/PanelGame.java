@@ -1,6 +1,8 @@
 package devoir2;
 import javax.swing.JPanel;
 
+import devoir2.Event.Type;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,7 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
+
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -29,7 +31,6 @@ public class PanelGame extends JPanel implements MouseListener
 	public int _nbPigeons=1;
 	public ArrayList<Food> _food;
 	private volatile boolean _isGameRefreshNeeded;
-	
 
 	
 	
@@ -49,7 +50,7 @@ public class PanelGame extends JPanel implements MouseListener
 		//{
 			//Pigeon p = new Pigeon(_dimension.width, _dimension.height,this);
 			_pigeons.add(new Pigeon(50,50,this));
-			_pigeons.add(new Pigeon(50,100,this));
+			//_pigeons.add(new Pigeon(50,100,this));
 		//}	
 	}
 	
@@ -83,23 +84,22 @@ public class PanelGame extends JPanel implements MouseListener
 	public void mouseClicked(MouseEvent e)
 	{
 		
-		System.out.println("Panel appuyé");
+		//System.out.println("Panel appuyé");
 		// TODO Auto-generated method stub
 		
 		int x = e.getX();
 		int y = e.getY();
 		
-		System.out.print("Clic à la position" + System.lineSeparator());
+		/*System.out.print("Clic à la position" + System.lineSeparator());
 		System.out.print("X :" + x + System.lineSeparator());
-		System.out.print("Y :" + y + System.lineSeparator());
+		System.out.print("Y :" + y + System.lineSeparator());*/
 		
 		synchronized(_food)
 		{
 			Food f = new Food(x, y);
 			_food.add(f);
+			MessageBroker.GetInstance().Publish(new Event(Type.FOOD,new Vector(x,y)));
 		}
-		
-		
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class PanelGame extends JPanel implements MouseListener
 	     {
 	    	 //g2d.drawImage(p.getImage(),p.getPosition()._x,p.getPosition()._y,this);
 	    	 Image imgPigeon = getToolkit().getImage(p.getSymbol());
-	    	g.drawImage(imgPigeon, p.getPosition()._x, p.getPosition()._y, null);
+	    	g.drawImage(imgPigeon, (int)p.getPosition()._x, (int)p.getPosition()._y, null);
 	     }
 	 }
 	 

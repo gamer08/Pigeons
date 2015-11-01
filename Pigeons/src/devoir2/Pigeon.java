@@ -32,6 +32,7 @@ public class Pigeon implements Runnable, SubscriberInterface
 	private long _now, _last;
 	private PanelGame _owner;
 	private float _fixedUpdateDeltaTime;
+	public Boolean _isScared; // bool qui sert a gere le fait qu'un pigeon ne mange as quand il est effrayé
 	
 	//Steering behavior data
 	
@@ -45,12 +46,14 @@ public class Pigeon implements Runnable, SubscriberInterface
 	{
 		Random rand = new Random();
 		
-		/*int xRandom;
+		int xRandom;
 		int yRandom;
 		xRandom = rand.nextInt(width +1);
-		yRandom = rand.nextInt(height +1);*/
+		yRandom = rand.nextInt(height +1);
 		
-		_position = new Vector(width, height);
+		//_position = new Vector(width, height);
+		
+		_position = new Vector(xRandom, yRandom);
 		
 		_gameTerminated = false;
 		_isUpdating = false;
@@ -65,7 +68,11 @@ public class Pigeon implements Runnable, SubscriberInterface
 		
 		_owner = panel;
 		
+		_isScared = false; // par défaut, un pigeon n'est pas effrayé
+		
 		MessageBroker.GetInstance().AddSubscriber(Type.FOOD, this);
+		MessageBroker.GetInstance().AddSubscriber(Type.PANIC, this);
+		MessageBroker.GetInstance().AddSubscriber(Type.FOOD_EXPIRED, this);
 		
 		Start();
 	}
@@ -181,13 +188,14 @@ public class Pigeon implements Runnable, SubscriberInterface
 	
 	private void Update(float deltaTime)
 	{
+
 		_isUpdating = true;
 		
 		Vector steeringForce = new Vector();
 		
 		steeringForce = _steeringBehavior.Calculate();
 		steeringForce = Vector.ScalarMultiplication(steeringForce, deltaTime);
-		
+			
 		//_velocity = Vector.Add(_velocity, steeringForce);
 		
 		_velocity = steeringForce;
@@ -197,15 +205,42 @@ public class Pigeon implements Runnable, SubscriberInterface
 		_position = Vector.Add(_position, _velocity);
 		
 		_isUpdating = false;
+		
+		
 	}
 	
 	public void HandleMessage(Event event)
 	{
 
+
 		if (event._type == Type.FOOD)
 		{
 			_steeringBehavior.OnSeek(true);
 			_steeringBehavior.SetTarget(event._position);
+			
+
+		}
+		
+		/**
+		 * Cas où l'évènement est un effraiement
+		 * Le calcul de la "target" doit être différent pour chaque pigeon
+		 * TO DO: éviter que le pigeon arrive sur la nourriture
+		 */
+		else if (event._type == Type.PANIC)
+		{
+			_isScared = true; // pigeon effrayé
+			_steeringBehavior.OnSeek(true);
+			Random rand = new Random();
+			int xRandom;
+			int yRandom;
+			xRandom = rand.nextInt(_owner._dimension.width +1);
+			yRandom = rand.nextInt(_owner._dimension.height +1);
+			_steeringBehavior.SetTarget(new Vector(xRandom, yRandom));
+		}
+		
+		else if (event._type == Type.FOOD_EXPIRED)
+		{
+			_steeringBehavior.OnSeek(false);
 		}
 		
 	}

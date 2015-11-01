@@ -63,5 +63,13 @@ public class Vector
 			result._y = (float) (vector._y / Math.sqrt(normeSquared));
 		}
 		return result;
-	}	
+	}
+	
+	
+	public static float getNorm(Vector vector)
+	{
+		float norm= (float) Math.sqrt(vector._x * vector._x + vector._y * vector._y);
+		
+		return norm;
+	}
 }

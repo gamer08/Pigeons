@@ -22,6 +22,8 @@ public class MainWindow extends JFrame{
 	
 	static PanelSettings _panelSettings;
 	static PanelGame _panelGame;
+	static int _width = 800;
+	static int _height = 400;
 	
 	public MainWindow()
 	{
@@ -57,8 +59,8 @@ public class MainWindow extends JFrame{
 	public static void setPanels()
 	{
 		System.out.println("setPanels");
-		_panelGame = new PanelGame();
-		_panelSettings = new PanelSettings();
+		_panelGame = new PanelGame(_width, _height);
+		_panelSettings = new PanelSettings(_width, _height);
              
 	}
 

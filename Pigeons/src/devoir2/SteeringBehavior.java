@@ -1,5 +1,7 @@
 package devoir2;
 
+import devoir2.Event.Type;
+
 public class SteeringBehavior 
 {
 	private Pigeon _owner;
@@ -29,6 +31,7 @@ public class SteeringBehavior
 	
 	public Vector Calculate()
 	{
+
 		_steeringForce = new Vector();
 		
 		if (_onSeek)
@@ -40,9 +43,27 @@ public class SteeringBehavior
 	public Vector Seek()
 	{
 		Vector toTarget = Vector.Substract(_target, _owner.getPosition());
-		toTarget = Vector.Normalize(toTarget);
+
+		
+		if (Vector.getNorm(toTarget)<2) // le pigeon n'est pas effrayé
+		{
+			OnSeek(false);
+			MessageBroker.GetInstance().Publish(new Event(Type.FOOD_EXPIRED));
+		}
+		
+		toTarget = Vector.Normalize(toTarget);	
+		
 		Vector desiredVelocity = Vector.ScalarMultiplication(toTarget, _owner.GetSpeed());
 		
-		return Vector.Substract(desiredVelocity, _owner.GetVelocity());
+		Vector r = Vector.Substract(desiredVelocity, _owner.GetVelocity());
+		
+		
+		
+		return r;
+	}
+	
+	public Vector getTarget()
+	{
+		return _target;
 	}
 }

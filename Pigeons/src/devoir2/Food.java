@@ -2,20 +2,67 @@ package devoir2;
 
 import java.awt.Image;
 
-public class Food {
+import devoir2.Event.Type;
+
+public class Food implements SubscriberInterface{
 	
 	Boolean _isFresh;
-	static String _symbol = "food.png";
+	 String _symbol = "food.png";
 	Position _position;
+	Boolean _isEaten;
 	
 	public Food(int x, int y)
 	{
 		_position = new Position(x,y);
+		MessageBroker.GetInstance().AddSubscriber(Type.FOOD, this); // pour s'abonner à l'évènement, il y a une nouvelle nourriture
+		MessageBroker.GetInstance().AddSubscriber(Type.FOOD_EXPIRED, this);
+		_isFresh = true;
+		_isEaten = false;
 	}
 	
-	public static String getSymbol()
+	public  String getSymbol()
 	{
 		return _symbol;
+	}
+	
+	public void setSymbol(String s)
+	{
+		System.out.println("In setSymbol");
+		_symbol = s;
+	}
+
+	@Override
+	public void HandleMessage(Event event) {
+		// TODO Auto-generated method stub
+		
+		if (event._type == Type.FOOD)
+		{
+			System.out.println("2. FOOD HANDLE MESSAGE");
+			
+			// Toutes les autres nourriture sauf la dernière deviennent "pourries"
+			setSymbol("food2.png");
+			_isFresh = false;
+		}
+		
+		else if (event._type == Type.FOOD_EXPIRED)
+		{
+			System.out.println("In Food.HandleMessage.Expired");
+			
+			if (_isFresh == true)
+			{
+				_isEaten = true;
+			}
+			
+		}
+		
+
+		
+	}
+	
+	
+	public Boolean isEaten()
+	{
+		return _isEaten;
 	}
 
 }

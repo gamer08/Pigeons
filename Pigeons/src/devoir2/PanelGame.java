@@ -28,30 +28,30 @@ public class PanelGame extends JPanel implements MouseListener
 {
 	static Dimension _dimension;
 	public ArrayList<Pigeon> _pigeons;
-	public int _nbPigeons=1;
+	public int _nbPigeons=3;
 	public ArrayList<Food> _food;
 	private volatile boolean _isGameRefreshNeeded;
 
 	
 	
-	public PanelGame()
+	public PanelGame(int w, int h)
 	{	
 		_isGameRefreshNeeded = false;
 		
 		System.out.println("Constructeur de GameUI");
-		this._dimension = new Dimension(400,500);
+		this._dimension = new Dimension(w,h);
 		this.setBackground(Color.green);
 		this.addMouseListener(this);
 		
 		_pigeons = new ArrayList<Pigeon>();
 		_food = new ArrayList<Food>();
 		
-		//for (int i=0; i<_nbPigeons; i++)
-		//{
-			//Pigeon p = new Pigeon(_dimension.width, _dimension.height,this);
-			_pigeons.add(new Pigeon(50,50,this));
-			//_pigeons.add(new Pigeon(50,100,this));
-		//}	
+		for (int i=0; i<_nbPigeons; i++)
+		{
+			Pigeon p = new Pigeon(_dimension.width, _dimension.height,this);
+			//_pigeons.add(new Pigeon(50,50,this));
+			_pigeons.add(p);
+		}	
 	}
 	
 	public static void CreateAndShowGUI() 
@@ -97,8 +97,16 @@ public class PanelGame extends JPanel implements MouseListener
 		synchronized(_food)
 		{
 			Food f = new Food(x, y);
-			_food.add(f);
+					
 			MessageBroker.GetInstance().Publish(new Event(Type.FOOD,new Vector(x,y)));
+			_food.add(f);
+			
+				
+			// Caractéristiques de la toute dernière nourriture
+			_food.get(_food.size()-1).setSymbol("food.png"); // la dernière food est commestible
+			_food.get(_food.size()-1)._isFresh = true;
+
+			
 		}
 	}
 
@@ -144,7 +152,7 @@ public class PanelGame extends JPanel implements MouseListener
 	     {
 	    	 //g2d.drawImage(p.getImage(),p.getPosition()._x,p.getPosition()._y,this);
 	    	 Image imgPigeon = getToolkit().getImage(p.getSymbol());
-	    	g.drawImage(imgPigeon, (int)p.getPosition()._x, (int)p.getPosition()._y, null);
+	    	 g.drawImage(imgPigeon, (int)p.getPosition()._x, (int)p.getPosition()._y, null);
 	     }
 	 }
 	 
@@ -160,9 +168,20 @@ public class PanelGame extends JPanel implements MouseListener
 		 synchronized(_food)
 		 {
 			 
-			 Image imgFood = getToolkit().getImage(Food.getSymbol());
+			 
 			 for (Food f : _food)
-			 g.drawImage(imgFood, f._position._x, f._position._y, null);
+				 
+			 {
+				 Image imgFood = getToolkit().getImage(f.getSymbol());
+				 
+				 //System.out.println("Taille de _food: " + _food.size());
+				 if (f.isEaten() == false)
+				 {
+					 g.drawImage(imgFood, f._position._x, f._position._y, null); // on dessine seulement les nourritures non mangées
+				 }
+			 }
+				 
+			 
 		 }
 		 
 		 

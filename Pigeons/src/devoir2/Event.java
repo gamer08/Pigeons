@@ -29,4 +29,15 @@ public  class Event
 		
 	}
 	
+	/**
+	 * Constructeur pour l'eveneement de peur
+	 * Il n'y a pas de calcul de la position ici
+	 * @param type
+	 */
+	public Event (Type type)
+	{
+		_type = type;
+		_position = new Vector(0, 0);
+	}
+	
 }

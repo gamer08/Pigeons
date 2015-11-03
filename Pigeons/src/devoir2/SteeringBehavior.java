@@ -10,6 +10,8 @@ public class SteeringBehavior
 	
 	private boolean _onSeek;
 	
+	private boolean _isScared;
+	
 	
 	public SteeringBehavior(Pigeon pigeon)
 	{
@@ -17,11 +19,17 @@ public class SteeringBehavior
 		_steeringForce = new Vector();
 		_target = new Vector(-1,-1);
 		_onSeek = false;
+		_isScared = false;
 	}
 	
 	public void OnSeek(boolean value)
 	{
 		_onSeek = value;
+	}
+	
+	public void IsScared(boolean value)
+	{
+		_isScared = value;
 	}
 	
 	public void SetTarget(Vector position)
@@ -37,6 +45,13 @@ public class SteeringBehavior
 		if (_onSeek)
 			_steeringForce = Vector.Add(_steeringForce, Seek());
 		
+		if (_isScared)
+		{
+			_steeringForce = Vector.Add(_steeringForce, Seek());
+		}
+		
+		
+		
 		return _steeringForce;
 	}
 	
@@ -45,10 +60,15 @@ public class SteeringBehavior
 		Vector toTarget = Vector.Substract(_target, _owner.getPosition());
 
 		
-		if (Vector.getNorm(toTarget)<2) // le pigeon n'est pas effrayé
+		if (Vector.getNorm(toTarget)<2 && !_isScared) // le pigeon n'est pas effrayé
 		{
 			OnSeek(false);
 			MessageBroker.GetInstance().Publish(new Event(Type.FOOD_EXPIRED));
+		}
+		
+		else if (Vector.getNorm(toTarget)<2 && _isScared)
+		{
+			IsScared(false);
 		}
 		
 		toTarget = Vector.Normalize(toTarget);	

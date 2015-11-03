@@ -229,7 +229,8 @@ public class Pigeon implements Runnable, SubscriberInterface
 		else if (event._type == Type.PANIC)
 		{
 			_isScared = true; // pigeon effrayé
-			_steeringBehavior.OnSeek(true);
+			_steeringBehavior.OnSeek(false);
+			_steeringBehavior.IsScared(true);
 			Random rand = new Random();
 			int xRandom;
 			int yRandom;

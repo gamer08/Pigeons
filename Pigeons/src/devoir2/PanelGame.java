@@ -158,7 +158,7 @@ public class PanelGame extends JPanel implements MouseListener
 	 
 
 	 /**
-	  * Méthode permettant de dessiner de la nourriture 
+	  * Méthode permettant de designer de la nourriture 
 	  * @param x Abscisse du clic
 	  * @param y Ordonnées du clic
 	  * @param g

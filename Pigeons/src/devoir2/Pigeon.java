@@ -1,20 +1,8 @@
 package devoir2;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Random;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.ImageIcon;
+import java.util.Random;
+
 
 import devoir2.Event.Type;
 import devoir2.Vector;
@@ -132,28 +120,8 @@ public class Pigeon implements Runnable, SubscriberInterface
 		}
 	}
 	
-	/*public boolean IsWainting()
-	{
-		boolean waiting = false;
-		Thread.State state = _thread.getState();
-		switch(state)
-		{
-			case TIMED_WAITING:
-			case WAITING:
-				waiting = true;
-				break;
-				
-			default:
-				break;
-				
-		}
-		return waiting;
-	}*/
 	
-	public void moveTo(Position p)
-	{
-		
-	}
+
 	
 	public static String getSymbol()
 	{

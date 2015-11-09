@@ -1,8 +1,12 @@
 package devoir2;
 
-import java.util.Vector;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
 
 import javax.swing.Timer;
+
+import devoir2.Event.Type;
 
 public class Game implements Runnable
 {
@@ -13,6 +17,10 @@ public class Game implements Runnable
 	private double _timePerTickInNanoSecond, _deltaTime;
 	private long _now, _last;
 	private boolean _isRefreshNeeded;
+	private Timer _timer; // timer utilisé pour l'evenemnt d'effraiement des pigeons
+	private ActionListener _frightenPigeons;
+	private int _timeRandom;
+	private int _nbPigeonsMoving;
 	
 	
 	public Game()
@@ -59,6 +67,9 @@ public class Game implements Runnable
 	{
 		Init();
 		
+		_timeRandom = (5 + new Random().nextInt(5)) * 1000;
+			
+		
 		_deltaTime = 0;
 		_last = System.nanoTime();
 		
@@ -67,14 +78,50 @@ public class Game implements Runnable
 			_now = System.nanoTime();
 			
 			if (!_isRefreshNeeded)
+			{
+				
 				_deltaTime+= (_now -_last) /_timePerTickInNanoSecond;
+				
+					
+			}
+				
 			
 			_last = _now;
 			
 			if (_deltaTime >=1)
 			{	
+				
 				_isRefreshNeeded = true;
 				_ui._panelGame.SetGameRefreshNeeded(true);
+				
+				for (Pigeon p:_ui._panelGame._pigeons)
+				{
+					int timer = 0;
+					if (p.GetVelocity()._x == 0.0f && p.GetVelocity()._y == 0.0f)
+					{
+						_nbPigeonsMoving+=1;
+						
+					}
+					
+				}
+				
+				System.out.println(_nbPigeonsMoving);
+				if (_nbPigeonsMoving == _ui._panelGame._nbPigeons)
+				{
+				
+				 _nbPigeonsMoving = 0;
+				 
+				 if (Math.random() < 0.0001) 
+				 {
+					_ui._panelSettings._labelFrightening.setText("Effraiement");
+					MessageBroker.GetInstance().Publish(new Event(Type.PANIC));
+				 }
+				 
+				}
+				
+				_nbPigeonsMoving = 0;
+				_ui._panelSettings._labelFrightening.setText("Rien");
+
 				
 				if (_ui._panelGame.CanRefreshGame())
 				{
@@ -90,10 +137,6 @@ public class Game implements Runnable
 		
 	}
 	
-	/*private void Tick(float deltaTime)
-	{
-		_ui._panelGame.UpdatePigeon(deltaTime);
-	}*/
 	
 	private void Render()
 	{
@@ -105,33 +148,5 @@ public class Game implements Runnable
 		return _isRefreshNeeded;
 	}
 	
-//	public synchronized void UpdatePigeon(float deltaTime)
-//	{
-//		for (Pigeon p : _pigeons)
-//		{	
-//			p.Update(deltaTime);
-//		}
-//	}
-//	
-//	private synchronized void DisableUpdatePigeons()
-//	{
-//		for (Pigeon p : _pigeons)
-//		{
-//			p.DisableRun();
-//		}
-//	}
-//	
-//	public synchronized boolean TryRefreshGame()
-//	{
-//		/*for (Pigeon p : _pigeons)
-//		{
-//			if (p.IsUpdating())
-//				return false;
-//		}*/
-//		
-//		DisableUpdatePigeons();
-//		
-//		return true;
-//	}
-//	
+	
 }

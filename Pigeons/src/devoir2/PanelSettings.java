@@ -13,10 +13,12 @@ import devoir2.Event.Type;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Random;
+import javax.swing.JLabel;
 
 public class PanelSettings extends JPanel implements MouseListener{
 	
 	public static JButton _buttonGame;
+	JLabel _labelFrightening;
 	
 	public PanelSettings(int w, int h)
 	{
@@ -34,6 +36,9 @@ public class PanelSettings extends JPanel implements MouseListener{
 			}
 		});
         add(_buttonGame);
+        
+        _labelFrightening = new JLabel("");
+        add(_labelFrightening);
 	}
 
 	@Override

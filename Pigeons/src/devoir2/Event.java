@@ -1,7 +1,5 @@
 package devoir2;
 
-
-
 public  class Event 
 {
 	public enum Type

@@ -1,17 +1,12 @@
 package devoir2;
 
-
 import java.util.Random;
-
-
 import devoir2.Event.Type;
 import devoir2.Vector;
 
 public class Pigeon implements Runnable, SubscriberInterface
 {
 	static String _symbol = "pigeon.png";
-	
-	//private final Image _image;
 	private Vector _position;
 	private Thread _thread;
 	private volatile boolean _gameTerminated, _isUpdating;
@@ -22,7 +17,6 @@ public class Pigeon implements Runnable, SubscriberInterface
 	private float _fixedUpdateDeltaTime;
 	public Boolean _isScared; // bool qui sert a gere le fait qu'un pigeon ne mange as quand il est effrayé
 	
-	//Steering behavior data
 	
 	private SteeringBehavior _steeringBehavior;
 	private boolean _onSeek;
@@ -38,8 +32,6 @@ public class Pigeon implements Runnable, SubscriberInterface
 		int yRandom;
 		xRandom = rand.nextInt(width +1);
 		yRandom = rand.nextInt(height +1);
-		
-		//_position = new Vector(width, height);
 		
 		_position = new Vector(xRandom, yRandom);
 		
@@ -127,12 +119,7 @@ public class Pigeon implements Runnable, SubscriberInterface
 	{
 		return _symbol;
 	}
-	
 
-	/*public Image getImage()
-	{
-		//return _image;
-	}*/
 	
 	public synchronized Vector getPosition()
 	{
@@ -163,8 +150,6 @@ public class Pigeon implements Runnable, SubscriberInterface
 		
 		steeringForce = _steeringBehavior.Calculate();
 		steeringForce = Vector.ScalarMultiplication(steeringForce, deltaTime);
-			
-		//_velocity = Vector.Add(_velocity, steeringForce);
 		
 		_velocity = steeringForce;
 		
@@ -214,38 +199,4 @@ public class Pigeon implements Runnable, SubscriberInterface
 		
 	}
 	
-	/*private synchronized void EnableRun()
-	{
-		if (_canUpdate || !_hasRunAtLeastOnce)
-			return;
-		
-		_canUpdate = true;
-		
-
-		
-		synchronized (this) 
-		{
-			this.notify();
-		}
-	}*/
-	
-	/*public synchronized void DisableRun()
-	{
-		if (_canUpdate)
-		{
-			_canUpdate = false;
-			
-		}
-	}*/
-	
-	/*private synchronized void UpdateLogic(float deltaTime)
-	{
-		_isUpdating = true;
-		
-		//_position._x+=1;
-		
-		System.out.println("Update " + _position._x +" " + System.nanoTime());
-		
-		_isUpdating = false;
-	}*/
 }

@@ -1,7 +1,5 @@
 package devoir2;
 
-import java.awt.Image;
-
 import devoir2.Event.Type;
 
 public class Food implements SubscriberInterface{
@@ -33,7 +31,6 @@ public class Food implements SubscriberInterface{
 
 	@Override
 	public void HandleMessage(Event event) {
-		// TODO Auto-generated method stub
 		
 		if (event._type == Type.FOOD)
 		{
@@ -54,7 +51,6 @@ public class Food implements SubscriberInterface{
 			}
 			
 		}
-		
 
 		
 	}

@@ -1,13 +1,13 @@
 package devoir2;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
-
 import javax.swing.Timer;
-
 import devoir2.Event.Type;
 
+/**
+ * Classe qui gère le déroulement du jeu.
+ */
 public class Game implements Runnable
 {
 	private MainWindow _ui;
@@ -81,8 +81,7 @@ public class Game implements Runnable
 			{
 				
 				_deltaTime+= (_now -_last) /_timePerTickInNanoSecond;
-				
-					
+								
 			}
 				
 			
@@ -111,16 +110,15 @@ public class Game implements Runnable
 				
 				 _nbPigeonsMoving = 0;
 				 
-				 if (Math.random() < 0.0001) 
+				 if (Math.random() < 0.003) 
 				 {
-					_ui._panelSettings._labelFrightening.setText("Effraiement");
 					MessageBroker.GetInstance().Publish(new Event(Type.PANIC));
 				 }
 				 
 				}
 				
 				_nbPigeonsMoving = 0;
-				_ui._panelSettings._labelFrightening.setText("Rien");
+
 
 				
 				if (_ui._panelGame.CanRefreshGame())

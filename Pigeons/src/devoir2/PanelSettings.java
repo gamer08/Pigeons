@@ -1,7 +1,6 @@
 package devoir2;
 
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -12,13 +11,11 @@ import devoir2.Event.Type;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.Random;
 import javax.swing.JLabel;
 
 public class PanelSettings extends JPanel implements MouseListener{
 	
 	public static JButton _buttonGame;
-	JLabel _labelFrightening;
 	
 	public PanelSettings(int w, int h)
 	{
@@ -31,14 +28,11 @@ public class PanelSettings extends JPanel implements MouseListener{
 		_buttonGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				System.out.println("Bouton appuyé");
 				MessageBroker.GetInstance().Publish(new Event(Type.PANIC));
 			}
 		});
         add(_buttonGame);
         
-        _labelFrightening = new JLabel("");
-        add(_labelFrightening);
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class MainWindow extends JFrame{
 	
 	public MainWindow()
 	{
-		System.out.println("Constructeur de MainUI");
+		
 		
 		  setFrame();
 	}
@@ -28,7 +28,7 @@ public class MainWindow extends JFrame{
 	public void setFrame()
 	{
 		
-		System.out.println("setFrame");
+		
 		setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -48,7 +48,7 @@ public class MainWindow extends JFrame{
 	 */
 	public static void setPanels()
 	{
-		System.out.println("setPanels");
+		
 		_panelGame = new PanelGame(_width, _height);
 		_panelSettings = new PanelSettings(_width, _height);
              

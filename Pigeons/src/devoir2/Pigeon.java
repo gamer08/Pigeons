@@ -4,6 +4,9 @@ import java.util.Random;
 import devoir2.Event.Type;
 import devoir2.Vector;
 
+/**
+ * Classe qui regroupe toutes les caractéristiques du pigeon
+ */
 public class Pigeon implements Runnable, SubscriberInterface
 {
 	static String _symbol = "pigeon.png";

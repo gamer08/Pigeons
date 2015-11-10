@@ -3,15 +3,12 @@ package devoir2;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import devoir2.Event.Type;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
+
 
 public class PanelSettings extends JPanel implements MouseListener{
 	
@@ -38,7 +35,7 @@ public class PanelSettings extends JPanel implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("Bouton cliqué");
+		
 	}
 
 	@Override

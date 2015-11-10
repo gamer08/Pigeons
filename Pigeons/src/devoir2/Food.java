@@ -25,7 +25,7 @@ public class Food implements SubscriberInterface{
 	
 	public void setSymbol(String s)
 	{
-		System.out.println("In setSymbol");
+		
 		_symbol = s;
 	}
 
@@ -34,7 +34,7 @@ public class Food implements SubscriberInterface{
 		
 		if (event._type == Type.FOOD)
 		{
-			System.out.println("2. FOOD HANDLE MESSAGE");
+			
 			
 			// Toutes les autres nourriture sauf la dernière deviennent "pourries"
 			setSymbol("food2.png");
@@ -43,7 +43,7 @@ public class Food implements SubscriberInterface{
 		
 		else if (event._type == Type.FOOD_EXPIRED)
 		{
-			System.out.println("In Food.HandleMessage.Expired");
+			
 			
 			if (_isFresh == true)
 			{

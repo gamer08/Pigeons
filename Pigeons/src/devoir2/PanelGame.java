@@ -29,7 +29,7 @@ public class PanelGame extends JPanel implements MouseListener
 	{	
 		_isGameRefreshNeeded = false;
 		
-		System.out.println("Constructeur de GameUI");
+		
 		this._dimension = new Dimension(w,h);
 		this.setBackground(Color.green);
 		this.addMouseListener(this);

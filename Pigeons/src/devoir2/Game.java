@@ -104,7 +104,7 @@ public class Game implements Runnable
 					
 				}
 				
-				System.out.println(_nbPigeonsMoving);
+				
 				if (_nbPigeonsMoving == _ui._panelGame._nbPigeons)
 				{
 				
